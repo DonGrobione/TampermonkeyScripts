@@ -7,6 +7,8 @@
 // @match        http://*.monzoon.net/*
 // @run-at       document-idle
 // @grant        none
+// @updateURL    https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/monzoon-autologin.user.js
+// @downloadURL  https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/monzoon-autologin.user.js
 // ==/UserScript==
 
 (function () {
