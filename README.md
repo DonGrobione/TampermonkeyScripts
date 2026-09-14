@@ -1,6 +1,6 @@
 Just a collection of scripts for tapermonkey.
 
-'monzoon-autologin.user.js'     # Automatically accepts TOS and logins into the WiFi page
+`monzoon-autologin.user.js`     # Automatically accepts TOS and logins into the WiFi page
 
 # License
 
