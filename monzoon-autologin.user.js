@@ -1,0 +1,44 @@
+// ==UserScript==
+// @name         Monzoon Audi Gäste WLAN Auto-Login
+// @namespace    local.monzoon.autologin
+// @version      1.0
+// @description  Setzt automatisch den Nutzungsbestätigungs-Haken und meldet sich im Monzoon Gäste WLAN an
+// @match        https://*.monzoon.net/*
+// @match        http://*.monzoon.net/*
+// @run-at       document-idle
+// @grant        none
+// ==/UserScript==
+
+(function () {
+    'use strict';
+
+    var cb  = document.getElementById('accTOS');
+    var btn = document.getElementById('connectBu');
+
+    // Nur auf der Login-Seite ausführen
+    if (!cb || !btn || !document.getElementById('loginform')) {
+        return;
+    }
+
+    // Doppelte Ausführung verhindern
+    if (window.__monzoonAutologinDone) {
+        return;
+    }
+    window.__monzoonAutologinDone = true;
+
+    // .click() löst toggleTOS() aus und aktiviert VERBINDEN
+    if (!cb.checked) {
+        cb.click();
+    }
+
+    // Kurz warten, bis der Button freigeschaltet ist, dann absenden
+    var attempts = 0;
+    var timer = setInterval(function () {
+        if (!btn.disabled) {
+            clearInterval(timer);
+            btn.click();
+        } else if (++attempts > 20) {
+            clearInterval(timer);
+        }
+    }, 250);
+})();
