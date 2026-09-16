@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Audi Citrix Auto Refresh
 // @namespace    https://rgrsawin.audi.de/
-// @version      1.1
-// @description  Klickt automatisch auf den Citrix-Timeout-Dialog "Aktualisieren".
+// @version      1.2
+// @description  Führt regelmäßig einen Refresh in Citrix Workspace aus.
+// @author       Helge Koenig
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
 // @run-at       document-idle
@@ -13,69 +14,58 @@
 (function () {
     'use strict';
 
-    const CHECK_INTERVAL_MILLISECONDS = 5000;
+    const REFRESH_INTERVAL_MINUTES = 3;
+    const REFRESH_INTERVAL_MILLISECONDS =
+        REFRESH_INTERVAL_MINUTES * 60 * 1000;
 
-    function GetRefreshButton() {
-        return Array.from(
-            document.querySelectorAll('a.dialog.button')
-        ).find(
-            button =>
-                button.textContent.trim().toLowerCase() === 'aktualisieren'
-        );
-    }
+    function InvokeRefresh() {
 
-    function IsElementVisible(element) {
-        if (!element) {
-            return false;
-        }
-
-        const computedStyle = window.getComputedStyle(element);
-
-        return (
-            computedStyle.display !== 'none' &&
-            computedStyle.visibility !== 'hidden' &&
-            computedStyle.opacity !== '0'
-        );
-    }
-
-    function ClickRefreshButton() {
         try {
-            const refreshButton = GetRefreshButton();
+
+            const refreshButton = document.querySelector(
+                '.refresh-button'
+            );
 
             if (!refreshButton) {
-                return;
-            }
 
-            const popup = refreshButton.closest('#genericMessageBoxPopup');
+                console.warn(
+                    '[Citrix Auto Refresh] Refresh button not found'
+                );
 
-            if (popup && !IsElementVisible(popup)) {
                 return;
             }
 
             console.log(
-                `[Citrix Auto Refresh] Refresh clicked: ${new Date().toISOString()}`
+                `[Citrix Auto Refresh] Refresh executed at ${new Date().toISOString()}`
             );
 
             refreshButton.click();
+
         }
         catch (error) {
+
             console.error(
                 '[Citrix Auto Refresh] Error:',
                 error
             );
+
         }
     }
 
-    function StartMonitoring() {
-        console.log(
-            '[Citrix Auto Refresh] Monitoring started'
-        );
+    console.log(
+        '[Citrix Auto Refresh] Started'
+    );
 
-        setInterval(
-            ClickRefreshButton,
-            CHECK_INTERVAL_MILLISECONDS
-        );
-    }
+    // Erster Refresh nach 10 Sekunden
+    setTimeout(
+        InvokeRefresh,
+        10000
+    );
 
-    StartMonitoring();
+    // Regelmäßiger Refresh
+    setInterval(
+        InvokeRefresh,
+        REFRESH_INTERVAL_MILLISECONDS
+    );
+
 })();
