@@ -3,7 +3,6 @@
 // @namespace    https://rgrsawin.audi.de/
 // @version      1.2
 // @description  Führt regelmäßig einen Refresh in Citrix Workspace aus.
-// @author       Helge Koenig
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
 // @run-at       document-idle
