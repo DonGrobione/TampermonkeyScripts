@@ -6,8 +6,8 @@
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
 // @run-at       document-idle
-// @updateURL    https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/AudiCitrixAutoRefresh.user.js
-// @downloadURL  https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/AudiCitrixAutoRefresh.user.js
+// @updateURL    https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js
+// @downloadURL  https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js
 // ==/UserScript==
 
 (function () {

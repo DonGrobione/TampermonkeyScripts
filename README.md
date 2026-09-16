@@ -6,7 +6,8 @@ A collection of my [Tampermonkey](https://www.tampermonkey.net/) userscripts.
 
 | Script | Purpose | Install |
 |---|---|---|
-| [monzoon-autologin.user.js](monzoon-autologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/monzoon-autologin.user.js) |
+| [CitrixAutoRefresh.user.js](Audi/CitrixAutoRefresh.user.js) | Periodically refreshes the Citrix Workspace page at Audi | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js) |
+| [monzoon-autologin.user.js](Audi/monzoon-autologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/monzoon-autologin.user.js) |
 
 ## Installation
 
@@ -29,6 +30,10 @@ Notes:
 - The captive portal page must open in a browser with Tampermonkey installed. On Windows, the automatic portal detection opens Edge; make sure the userscript is installed there or open the portal page manually in your preferred browser.
 - By using this script, you automatically accept the provider's terms of service on every connection.
 - The wireless transmission in this guest network is unencrypted (see the portal's TOS, section 3.1). Using a VPN is recommended regardless of this script.
+
+### CitrixAutoRefresh
+
+The script automatically clicks the refresh button in Citrix Workspace every three minutes to keep the session active.
 
 ## Updating
 
