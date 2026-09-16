@@ -3,7 +3,6 @@
 // @namespace    https://rgrsawin.audi.de/
 // @version      1.1
 // @description  Klickt automatisch auf den Citrix-Timeout-Dialog "Aktualisieren".
-// @author       Helge Koenig
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
 // @run-at       document-idle
