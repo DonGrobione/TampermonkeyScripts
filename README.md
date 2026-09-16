@@ -6,7 +6,7 @@ A collection of my [Tampermonkey](https://www.tampermonkey.net/) userscripts.
 
 | Script | Purpose | Install |
 |---|---|---|
-| [CitrixAutoRefresh.user.js](Audi/CitrixAutoRefresh.user.js) | Periodically refreshes the Citrix Workspace page at Audi | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js) |
+| [CitrixAutoRefresh.user.js](Audi/CitrixAutoRefresh.user.js) | Periodically refreshes the Citrix Workspace page to prevent session logout | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js) |
 | [monzoon-autologin.user.js](Audi/monzoon-autologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/monzoon-autologin.user.js) |
 
 ## Installation
@@ -17,32 +17,19 @@ A collection of my [Tampermonkey](https://www.tampermonkey.net/) userscripts.
 
 The script keeps itself up to date automatically via the `@updateURL`/`@downloadURL` metadata directives, as long as the repository stays public.
 
-### monzoon-autologin
+## Legal Notice / Impressum
 
-When your machine connects to the guest WiFi, the captive portal page opens (usually triggered automatically by the OS or browser). The script then:
+This is a **private, non-commercial hobby project**. It is maintained by a private individual in their spare time and is not affiliated with, endorsed, sponsored, or supported by **Audi AG** or the **Volkswagen Group** in any way.
 
-- ticks the TOS acceptance checkbox,
-- waits until the connect button is enabled,
-- clicks it to log in.
+- Any trademarks, product names, or company names mentioned (e.g. "Audi", "Citrix Workspace") are the property of their respective
+  owners and are used purely for descriptive purposes to identify the environments these userscripts interact with.
+- The scripts are not official software and are **not intended for productive or business-critical use**. Using them may violate your employer's IT policies — check before installing.
+- No warranty is provided. Use of these scripts is entirely at your own risk. The author assumes no liability for any damages or consequences arising from their use.
 
-Notes:
+### AI Usage
 
-- The captive portal page must open in a browser with Tampermonkey installed. On Windows, the automatic portal detection opens Edge; make sure the userscript is installed there or open the portal page manually in your preferred browser.
-- By using this script, you automatically accept the provider's terms of service on every connection.
-- The wireless transmission in this guest network is unencrypted (see the portal's TOS, section 3.1). Using a VPN is recommended regardless of this script.
+This project were created with the support of AI tooling.
 
-### CitrixAutoRefresh
-
-The script automatically clicks the refresh button in Citrix Workspace every three minutes to keep the session active.
-
-## Updating
-
-Scripts update themselves through Tampermonkey whenever the version number in this repository increases. To check for updates manually, open the Tampermonkey dashboard → *Utilities* → *Check for userscripts updates*.
-
-## License
+### License
 
 This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0). See [License.md](License.md) for the full license text.
-
-## AI Usage
-
-Parts of this project were created with the support of AI tooling.
