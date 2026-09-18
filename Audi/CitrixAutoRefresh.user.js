@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Audi Citrix Auto Refresh
 // @namespace    https://rgrsawin.audi.de/
-// @version      1.2
+// @version      1.3
 // @description  Führt regelmäßig einen Refresh in Citrix Workspace aus.
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
