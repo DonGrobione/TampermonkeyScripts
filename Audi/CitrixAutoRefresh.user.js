@@ -35,7 +35,7 @@
             }
 
             console.log(
-                `[Citrix Auto Refresh] Refresh executed at ${new Date().toISOString()}`
+                `[Citrix Auto Refresh] Refresh executed at ${new Date().toLocaleString('de-DE')}`
             );
 
             refreshButton.click();
