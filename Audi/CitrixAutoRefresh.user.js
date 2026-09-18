@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Audi Citrix Auto Refresh
 // @namespace    https://rgrsawin.audi.de/
-// @version      1.3
+// @version      1.3.1
 // @description  Führt regelmäßig einen Refresh in Citrix Workspace aus.
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
@@ -14,6 +14,7 @@
     'use strict';
 
     const REFRESH_INTERVAL_MINUTES = 3;
+
     const REFRESH_INTERVAL_MILLISECONDS =
         REFRESH_INTERVAL_MINUTES * 60 * 1000;
 
@@ -35,10 +36,19 @@
             }
 
             console.log(
-                `[Citrix Auto Refresh] Refresh executed at ${new Date().toLocaleString('de-DE')}`
+                `[Citrix Auto Refresh] Clicking refresh button at ${new Date().toLocaleString('de-DE')}`
             );
 
-            refreshButton.click();
+            refreshButton.dispatchEvent(
+                new MouseEvent(
+                    'click',
+                    {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    }
+                )
+            );
 
         }
         catch (error) {
@@ -55,13 +65,11 @@
         '[Citrix Auto Refresh] Started'
     );
 
-    // Erster Refresh nach 10 Sekunden
     setTimeout(
         InvokeRefresh,
         10000
     );
 
-    // Regelmäßiger Refresh
     setInterval(
         InvokeRefresh,
         REFRESH_INTERVAL_MILLISECONDS
