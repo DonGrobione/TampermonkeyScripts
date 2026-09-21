@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         Monzoon Audi Gäste WLAN Auto-Login
+// @name         Audi Guest WiFi Auto-Login
 // @namespace    local.monzoon.autologin
-// @version      1.4
+// @version      1.4.2
 // @description  Setzt automatisch den Nutzungsbestätigungs-Haken und meldet sich im Monzoon Gäste WLAN an
 // @match        https://*.monzoon.net/*
 // @match        http://*.monzoon.net/*
 // @grant        none
 // @run-at       document-idle
-// @updateURL    https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/monzoon-autologin.user.js
-// @downloadURL  https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/monzoon-autologin.user.js
+// @updateURL    https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/GuestWiFiAutologin.user.js
+// @downloadURL  https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/Audi/GuestWiFiAutologin.user.js
 // ==/UserScript==
 
 (function () {
