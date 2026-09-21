@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Monzoon Audi Gäste WLAN Auto-Login
 // @namespace    local.monzoon.autologin
-// @version      1.3
+// @version      1.4
 // @description  Setzt automatisch den Nutzungsbestätigungs-Haken und meldet sich im Monzoon Gäste WLAN an
 // @match        https://*.monzoon.net/*
 // @match        http://*.monzoon.net/*
@@ -14,81 +14,107 @@
 (function () {
     'use strict';
 
-    // Statusmeldungen, bei denen kein Login möglich ist
-    var STATUS_MESSAGES = ['session already active', 'could not find session'];
+    const LOG_PREFIX = '[Monzoon AutoLogin]';
+
+    function log(message) {
+        const timestamp = new Date().toISOString();
+        console.log(`${LOG_PREFIX} ${timestamp} - ${message}`);
+    }
 
     function hasStatusMessage() {
-        var text = (document.body.innerText || '').toLowerCase();
-        for (var i = 0; i < STATUS_MESSAGES.length; i++) {
-            if (text.indexOf(STATUS_MESSAGES[i]) !== -1) {
-                return true;
-            }
-        }
-        return false;
+        const text = (document.body.innerText || '').toLowerCase();
+
+        return (
+            text.includes('session already active') ||
+            text.includes('could not find session')
+        );
     }
 
-    var cb  = document.getElementById('accTOS');
-    var btn = document.getElementById('connectBu');
+    const checkbox = document.getElementById('accTOS');
+    const connectButton = document.getElementById('connectBu');
+    const loginForm = document.getElementById('loginform');
 
-    // Nur auf der Login-Seite ausführen
-    if (!cb || !btn || !document.getElementById('loginform')) {
+    log(`Script started on ${window.location.href}`);
+
+    if (!checkbox || !connectButton || !loginForm) {
+        log('Required elements not found. Exiting.');
         return;
     }
 
-    // Bei Statusmeldungen, die kein Login benötigen, abbrechen.
-    // sessionStorage verhindert auch bei Reloads der Portalseite eine Endlosschleife.
     if (hasStatusMessage()) {
-        try {
-            sessionStorage.setItem('monzoonSkip', '1');
-        } catch (e) { /* sessionStorage evtl. blockiert */ }
+        log('Status message detected. Exiting.');
         return;
     }
 
-    // Wurde eine Statusmeldung bereits in dieser Browser-Session gesehen?
-    // Dann dieses Mal endgültig nichts mehr tun (Schleifenschutz).
-    var skipped;
-    try {
-        skipped = sessionStorage.getItem('monzoonSkip') === '1';
-    } catch (e) {
-        skipped = false;
-    }
-    if (skipped) {
-        return;
-    }
-
-    // Doppelte Ausführung im selben Dokument verhindern
     if (window.__monzoonAutologinDone) {
+        log('Already executed in this document.');
         return;
     }
+
     window.__monzoonAutologinDone = true;
 
-    // TOS-Haken setzen (falls nicht bereits gesetzt)
-    if (!cb.checked) {
-        cb.click();
-    }
+    log(`Initial checkbox state: ${checkbox.checked}`);
+    log(`Initial button disabled: ${connectButton.disabled}`);
 
-    // Auf die Button-Freigabe warten: erst klicken, wenn nicht mehr ausgegraut
-    var tosDelay = 600;
-    var attempts = 0;
-    setTimeout(function () {
-        var timer = setInterval(function () {
-            // Zwischenzeitlich aufgetauchte Statusmeldung? Dann.Stop.
+    try {
+        //
+        // TOS akzeptieren
+        //
+        checkbox.checked = true;
+        log('Checkbox checked programmatically.');
+
+        //
+        // Originale Monzoon-Funktion ausführen
+        //
+        if (typeof toggleTOS === 'function') {
+            toggleTOS();
+            log('toggleTOS() executed.');
+        } else {
+            log('toggleTOS() not found.');
+        }
+
+        log(`Button disabled after toggleTOS(): ${connectButton.disabled}`);
+
+        //
+        // Sofort prüfen, ob der Button freigegeben wurde
+        //
+        let attempts = 0;
+
+        const timer = setInterval(function () {
+
+            attempts++;
+
+            log(
+                `Attempt ${attempts}: ` +
+                `button.disabled=${connectButton.disabled}`
+            );
+
             if (hasStatusMessage()) {
+                log('Status message appeared. Stopping.');
                 clearInterval(timer);
-                try {
-                    sessionStorage.setItem('monzoonSkip', '1');
-                } catch (e) {}
                 return;
             }
 
-            if (!btn.disabled) {
-                // Button ist freigegeben -> jetzt klicken
+            if (!connectButton.disabled) {
+                log('Button enabled. Clicking now.');
+
                 clearInterval(timer);
-                btn.click();
-            } else if (++attempts > 20) {
-                // Button bleibt ausgegraut -> aufgeben
+
+                connectButton.click();
+
+                log('Click sent.');
+                return;
+            }
+
+            if (attempts >= 100) {
+                log('Timeout reached after 10 seconds.');
                 clearInterval(timer);
             }
-        }, 250);
-    }, tosDelay);
+
+        }, 100);
+
+    } catch (error) {
+        console.error(`${LOG_PREFIX} ERROR`, error);
+    }
+
 })();
