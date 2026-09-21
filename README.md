@@ -7,7 +7,7 @@ A collection of my [Tampermonkey](https://www.tampermonkey.net/) userscripts.
 | Script | Purpose | Install |
 |---|---|---|
 | [CitrixAutoRefresh.user.js](Audi/CitrixAutoRefresh.user.js) | Periodically refreshes the Citrix Workspace page to prevent session logout | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js) |
-| [monzoon-autologin.user.js](Audi/monzoon-autologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/monzoon-autologin.user.js) |
+| [GuestWiFiAutologin.user.js](Audi/GuestWiFiAutologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/GuestWiFiAutologin.user.js) |
 
 ## Installation
 
