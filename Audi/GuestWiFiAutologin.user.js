@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Audi Guest WiFi Auto-Login
 // @namespace    local.monzoon.autologin
-// @version      1.4.2
-// @description  Setzt automatisch den Nutzungsbestätigungs-Haken und meldet sich im Monzoon Gäste WLAN an
+// @version      1.5
+// @description  Setzt automatisch den Nutzungsbestimmungs-Haken und meldet sich im Monzoon Gäste WLAN an
 // @match        https://*.monzoon.net/*
 // @match        http://*.monzoon.net/*
 // @grant        none
@@ -21,6 +21,12 @@
         console.log(`${LOG_PREFIX} ${timestamp} - ${message}`);
     }
 
+    function fireEvents(element, types) {
+        for (const type of types) {
+            element.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }));
+        }
+    }
+
     function hasStatusMessage() {
         const text = (document.body.innerText || '').toLowerCase();
 
@@ -30,21 +36,7 @@
         );
     }
 
-    const checkbox = document.getElementById('accTOS');
-    const connectButton = document.getElementById('connectBu');
-    const loginForm = document.getElementById('loginform');
-
     log(`Script started on ${window.location.href}`);
-
-    if (!checkbox || !connectButton || !loginForm) {
-        log('Required elements not found. Exiting.');
-        return;
-    }
-
-    if (hasStatusMessage()) {
-        log('Status message detected. Exiting.');
-        return;
-    }
 
     if (window.__monzoonAutologinDone) {
         log('Already executed in this document.');
@@ -53,68 +45,88 @@
 
     window.__monzoonAutologinDone = true;
 
-    log(`Initial checkbox state: ${checkbox.checked}`);
-    log(`Initial button disabled: ${connectButton.disabled}`);
+    let attempts = 0;
 
-    try {
-        //
-        // TOS akzeptieren
-        //
-        checkbox.checked = true;
-        log('Checkbox checked programmatically.');
+    const timer = setInterval(function () {
+        attempts++;
 
-        //
-        // Originale Monzoon-Funktion ausführen
-        //
-        if (typeof toggleTOS === 'function') {
-            toggleTOS();
-            log('toggleTOS() executed.');
-        } else {
-            log('toggleTOS() not found.');
+        // Elemente bei jedem Versuch frisch holen —
+        // die neue Landingpage rendert/spät dynamisch.
+        const checkbox = document.getElementById('accTOS');
+        const connectButton = document.getElementById('connectBu');
+        const loginForm = document.getElementById('loginform');
+
+        if (!checkbox || !connectButton || !loginForm) {
+            if (attempts >= 100) {
+                log('Required elements not found. Giving up.');
+                clearInterval(timer);
+            }
+            return;
         }
 
-        log(`Button disabled after toggleTOS(): ${connectButton.disabled}`);
+        if (hasStatusMessage()) {
+            log('Status message detected. Stopping.');
+            clearInterval(timer);
+            return;
+        }
 
-        //
-        // Sofort prüfen, ob der Button freigegeben wurde
-        //
-        let attempts = 0;
+        // TOS-Haken setzen und echte Events feuern,
+        // damit eigene Listener der Seite (sofern intakt) reagieren.
+        if (!checkbox.checked) {
+            log('Checking TOS checkbox.');
+            checkbox.checked = true;
+            fireEvents(checkbox, ['input', 'change']);
+            log('Checkbox checked programmatically.');
+        }
 
-        const timer = setInterval(function () {
-
-            attempts++;
-
-            log(
-                `Attempt ${attempts}: ` +
-                `button.disabled=${connectButton.disabled}`
-            );
-
-            if (hasStatusMessage()) {
-                log('Status message appeared. Stopping.');
-                clearInterval(timer);
-                return;
+        // Originale Monzoon-Funktion ausführen — in eigenem try/catch,
+        // damit ihr interner Fehler (null-Element auf neuer Seite)
+        // den Ablauf nicht mehr abbricht.
+        if (typeof toggleTOS === 'function') {
+            try {
+                toggleTOS();
+                log('toggleTOS() executed.');
+            } catch (e) {
+                log(`toggleTOS() failed (${e.message}) — force-enabling button.`);
             }
+        }
 
-            if (!connectButton.disabled) {
-                log('Button enabled. Clicking now.');
+        // Seitenlogik nicht länger vertrauen: Button selbst freischalten.
+        if (connectButton.disabled) {
+            connectButton.disabled = false;
+            connectButton.removeAttribute('disabled');
+            log('Button force-enabled.');
+        }
 
-                clearInterval(timer);
+        log(`Attempt ${attempts}: button.disabled=${connectButton.disabled}`);
 
-                connectButton.click();
+        if (!connectButton.disabled) {
+            clearInterval(timer);
 
-                log('Click sent.');
-                return;
-            }
+            connectButton.click();
+            log('Click sent.');
 
-            if (attempts >= 100) {
-                log('Timeout reached after 10 seconds.');
-                clearInterval(timer);
-            }
+            // Fallback: Formular direkt absenden, falls click()
+            // von der Seite blockiert oder nicht gebunden ist.
+            setTimeout(function () {
+                if (document.body && loginForm.isConnected) {
+                    try {
+                        HTMLFormElement.prototype.submit.call(loginForm);
+                        log('Fallback form submit executed.');
+                    } catch (e) {
+                        log(`Fallback form submit failed: ${e.message}`);
+                    }
+                }
+            }, 750);
 
-        }, 100);
+            return;
+        }
 
-    } catch (error) {
-        console.error(`${LOG_PREFIX} ERROR`, error);
-    }
+        if (attempts >= 100) {
+            log('Timeout reached after 10 seconds.');
+            clearInterval(timer);
+        }
+
+    }, 100);
 
 })();
