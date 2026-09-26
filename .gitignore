@@ -1,6 +1,2 @@
 # Visual Studio Code
 .vscode/
-
-# Private files
-README.private.md
-To-Do.md
