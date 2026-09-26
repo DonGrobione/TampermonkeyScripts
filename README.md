@@ -32,4 +32,4 @@ This project were created with the support of AI tooling.
 
 ### License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0). See [License.md](License.md) for the full license text.
+This project is licensed under the GNU Affero General Public License, version 3 (AGPL-3.0). See [License.md](License.md) for the full license text.
