@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Audi Guest WiFi Auto-Login
 // @namespace    local.monzoon.autologin
-// @version      1.5
-// @description  Setzt automatisch den Nutzungsbestimmungs-Haken und meldet sich im Monzoon Gäste WLAN an
+// @version      1.5.1
+// @description  Automatically ticks the terms-of-service checkbox and logs in to the Monzoon guest WiFi
 // @match        https://*.monzoon.net/*
 // @match        http://*.monzoon.net/*
 // @grant        none
@@ -50,8 +50,8 @@
     const timer = setInterval(function () {
         attempts++;
 
-        // Elemente bei jedem Versuch frisch holen —
-        // die neue Landingpage rendert/spät dynamisch.
+        // Look up the elements fresh on every attempt —
+        // the new landing page renders late/dynamically.
         const checkbox = document.getElementById('accTOS');
         const connectButton = document.getElementById('connectBu');
         const loginForm = document.getElementById('loginform');
@@ -70,8 +70,8 @@
             return;
         }
 
-        // TOS-Haken setzen und echte Events feuern,
-        // damit eigene Listener der Seite (sofern intakt) reagieren.
+        // Tick the TOS checkbox and fire real events
+        // so the page's own listeners (if intact) react.
         if (!checkbox.checked) {
             log('Checking TOS checkbox.');
             checkbox.checked = true;
@@ -79,9 +79,9 @@
             log('Checkbox checked programmatically.');
         }
 
-        // Originale Monzoon-Funktion ausführen — in eigenem try/catch,
-        // damit ihr interner Fehler (null-Element auf neuer Seite)
-        // den Ablauf nicht mehr abbricht.
+        // Run the original Monzoon function — in its own try/catch,
+        // so its internal error (null element on the new page)
+        // no longer aborts the flow.
         if (typeof toggleTOS === 'function') {
             try {
                 toggleTOS();
@@ -91,7 +91,7 @@
             }
         }
 
-        // Seitenlogik nicht länger vertrauen: Button selbst freischalten.
+        // Stop relying on the page logic: enable the button ourselves.
         if (connectButton.disabled) {
             connectButton.disabled = false;
             connectButton.removeAttribute('disabled');
@@ -106,8 +106,8 @@
             connectButton.click();
             log('Click sent.');
 
-            // Fallback: Formular direkt absenden, falls click()
-            // von der Seite blockiert oder nicht gebunden ist.
+            // Fallback: submit the form directly in case click()
+            // is blocked by the page or not bound.
             setTimeout(function () {
                 if (document.body && loginForm.isConnected) {
                     try {

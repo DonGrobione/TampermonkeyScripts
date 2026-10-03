@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Audi Citrix Auto Refresh
 // @namespace    https://rgrsawin.audi.de/
-// @version      1.4.0
-// @description  Führt regelmäßig einen Refresh in Citrix Workspace aus und bestätigt den Dialog "Aktualisieren" automatisch.
+// @version      1.4.1
+// @description  Periodically refreshes Citrix Workspace and automatically confirms the "Aktualisieren" (update) dialog.
 // @match        https://rgrsawin.audi.de/Citrix/RGRSAWinInternetWeb/*
 // @grant        none
 // @run-at       document-idle
@@ -56,7 +56,7 @@
 
         try {
 
-            // Zuerst prüfen, ob bereits ein Aktualisieren-Dialog offen ist
+            // First check whether an "Aktualisieren" dialog is already open
             if (ClickUpdateDialog()) {
                 return;
             }
@@ -95,7 +95,7 @@
         '[Citrix Auto Refresh] Started'
     );
 
-    // Überwacht die Seite auf neu erscheinende Dialoge
+    // Watch the page for newly appearing dialogs
     const mutationObserver = new MutationObserver(() => {
 
         ClickUpdateDialog();
@@ -110,13 +110,13 @@
         }
     );
 
-    // Erste Prüfung nach dem Laden
+    // Initial check after page load
     setTimeout(
         InvokeRefresh,
         10000
     );
 
-    // Regelmäßiger Refresh
+    // Periodic refresh
     setInterval(
         InvokeRefresh,
         REFRESH_INTERVAL_MILLISECONDS

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         YouTube Highest Quality
 // @namespace    local.youtube.highestquality
-// @version      1.1
-// @description  Wählt automatisch die höchste verfügbare Videoqualität auf YouTube
+// @version      1.1.1
+// @description  Automatically selects the highest available video quality on YouTube
 // @match        https://www.youtube.com/*
 // @match        https://m.youtube.com/*
 // @match        https://www.youtube-nocookie.com/embed/*
@@ -17,8 +17,8 @@
 
     const LOG_PREFIX = '[YT HighestQuality]';
 
-    // Rangfolge von hoch nach niedrig — Fallback, falls die Player-API
-    // die Liste einmal nicht sortiert liefert.
+    // Ranking from highest to lowest — fallback in case the player API
+    // ever returns the list unsorted.
     const QUALITY_ORDER = [
         'highres', 'hd2880', 'hd2160', 'hd1440', 'hd1080',
         'hd720', 'large', 'medium', 'small', 'tiny'
@@ -45,8 +45,8 @@
         return known.sort((a, b) => QUALITY_ORDER.indexOf(a) - QUALITY_ORDER.indexOf(b))[0];
     }
 
-    // Sucht die "Premium"-Variante (erhöhte Bitrate) zur gewählten Qualität.
-    // Nur verfügbar mit YouTube Premium — sonst ist isPlayable false.
+    // Finds the "Premium" variant (enhanced bitrate) of the chosen quality.
+    // Only available with YouTube Premium — otherwise isPlayable is false.
     function findPremiumFormat(player, quality) {
         if (typeof player.getAvailableQualityData !== 'function') {
             return null;
@@ -68,8 +68,8 @@
             return false;
         }
 
-        // Während Werbung liefert der Player die Qualitätsstufen der Anzeige —
-        // erst nach der Werbung setzen.
+        // During ads the player reports the ad's quality levels —
+        // only apply once the ad is over.
         if (player.classList.contains('ad-showing')) {
             return false;
         }
@@ -90,7 +90,7 @@
         }
 
         if (premium && typeof player.setPlaybackQualityRange === 'function') {
-            // Dritter Parameter wählt das konkrete Format (Premium-Bitrate).
+            // The third parameter selects the specific format (Premium bitrate).
             player.setPlaybackQualityRange(best, best, premium.formatId);
         } else {
             if (typeof player.setPlaybackQualityRange === 'function') {
@@ -107,8 +107,8 @@
         return true;
     }
 
-    // Qualitätsstufen stehen erst kurz nach dem Laden des Videos bereit,
-    // daher einige Sekunden lang wiederholt versuchen.
+    // Quality levels only become available shortly after the video loads,
+    // so keep retrying for a few seconds.
     let retryTimer = null;
 
     function scheduleApply() {
@@ -132,8 +132,8 @@
         }
         hookedPlayer = player;
 
-        // Bei jedem Wechsel auf "läuft" (1) oder "gepuffert" (5) erneut prüfen —
-        // fängt neue Videos in Playlisten und das Ende von Werbung ab.
+        // Re-check on every change to "playing" (1) or "cued" (5) —
+        // catches new videos in playlists and the end of ads.
         player.addEventListener('onStateChange', function (state) {
             if (state === 1 || state === 5) {
                 applyHighestQuality();
@@ -148,7 +148,7 @@
         scheduleApply();
     }
 
-    // YouTube ist eine SPA — Seitenwechsel lösen kein neues Laden des Skripts aus.
+    // YouTube is an SPA — page changes don't reload the script.
     document.addEventListener('yt-navigate-finish', onNavigate);
     document.addEventListener('yt-player-updated', onNavigate);
     window.addEventListener('state-navigateend', onNavigate); // m.youtube.com

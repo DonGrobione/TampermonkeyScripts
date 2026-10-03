@@ -20,12 +20,11 @@ The script keeps itself up to date automatically via the `@updateURL`/`@download
 
 ## Legal Notice / Impressum
 
-This is a **private, non-commercial hobby project**. It is maintained by a private individual in their spare time and is not affiliated with, endorsed, sponsored, or supported by **Audi AG** or the **Volkswagen Group** in any way.
+This is a **private, non-commercial hobby project**. It is **not affiliated with or endorsed by** any company, website, or organization mentioned in or used by these scripts.
 
-- Any trademarks, product names, or company names mentioned (e.g. "Audi", "Citrix Workspace") are the property of their respective
-  owners and are used purely for descriptive purposes to identify the environments these userscripts interact with.
-- The scripts are not official software and are **not intended for productive or business-critical use**. Using them may violate your employer's IT policies — check before installing.
-- No warranty is provided. Use of these scripts is entirely at your own risk. The author assumes no liability for any damages or consequences arising from their use.
+- All trademarks and product names (e.g. "Audi", "Citrix Workspace", "YouTube") belong to their respective owners and are used only to identify the sites these scripts work with.
+- Using the scripts may violate a website's terms of service or your employer's IT policies — checking this is your responsibility.
+- **Not intended for business-critical use.** No warranty; use at your own risk. The author accepts no liability for any damages.
 
 ### AI Usage
 
