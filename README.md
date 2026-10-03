@@ -8,6 +8,7 @@ A collection of my [Tampermonkey](https://www.tampermonkey.net/) userscripts.
 |---|---|---|
 | [CitrixAutoRefresh.user.js](Audi/CitrixAutoRefresh.user.js) | Periodically refreshes the Citrix Workspace page to prevent session logout | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/CitrixAutoRefresh.user.js) |
 | [GuestWiFiAutologin.user.js](Audi/GuestWiFiAutologin.user.js) | Automatically accepts the TOS checkbox and submits the login form on the Monzoon guest WiFi captive portal (deployed at Audi sites) | [Install](https://github.com/DonGrobione/TapermonkeyScripts/raw/refs/heads/main/Audi/GuestWiFiAutologin.user.js) |
+| [HighestQuality.user.js](YouTube/HighestQuality.user.js) | Automatically selects the highest available video quality on YouTube | [Install](https://github.com/DonGrobione/TampermonkeyScripts/raw/refs/heads/main/YouTube/HighestQuality.user.js) |
 
 ## Installation
 
